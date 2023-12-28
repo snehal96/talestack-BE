@@ -1,0 +1,7 @@
+{
+  "accessKeyId": "AKIA5DTP24VSPT4PW2FL",
+  "secretAccesskey": "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",
+  "region": "ap-southeast-2",
+  "bucketName": "talestack",
+  "endpointUrl": "https://talestack.s3.ap-southeast-2.amazonaws.com"
+}
