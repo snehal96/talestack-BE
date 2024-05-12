@@ -33,6 +33,12 @@ firebaseAdmin.initializeApp({
   credential: firebaseAdmin.credential.cert(serviceAccount),
 });
 
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+app.use(express.static(path.join(__dirname, "public")));
+
 //api routes
 require("./routes/category.routes")(app);
 require("./routes/home.routes")(app);
@@ -40,12 +46,6 @@ require("./routes/interaction.routes")(app);
 require("./routes/story.routes")(app);
 require("./routes/tale.routes")(app);
 require("./routes/user.routes")(app);
-
-app.use(logger("dev"));
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser());
-app.use(express.static(path.join(__dirname, "public")));
 
 // catch 404 and forward to error handler
 app.use(function (req, res, next) {

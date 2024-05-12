@@ -54,7 +54,7 @@ exports.addTale = async ({
     expectedStoryCount,
   });
   await taleObj.save();
-  return await taleId;
+  return taleId;
 };
 
 exports.updateTale = async (userId, taleId, query) => {
