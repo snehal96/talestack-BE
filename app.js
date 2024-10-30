@@ -6,6 +6,7 @@ const path = require("path");
 const cookieParser = require("cookie-parser");
 const logger = require("morgan");
 const cors = require("cors");
+const multer = require('multer')
 const db = require("./models/index");
 
 var app = express();
@@ -35,16 +36,19 @@ firebaseAdmin.initializeApp({
 
 app.use(logger("dev"));
 app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
+app.use(express.urlencoded({ extended: true }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, "public")));
+
+const storage = multer.memoryStorage();
+const upload = multer({ storage });
 
 //api routes
 require("./routes/category.routes")(app);
 require("./routes/home.routes")(app);
 require("./routes/interaction.routes")(app);
 require("./routes/story.routes")(app);
-require("./routes/tale.routes")(app);
+require("./routes/tale.routes")(app, upload);
 require("./routes/user.routes")(app);
 
 // catch 404 and forward to error handler

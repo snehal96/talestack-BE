@@ -59,7 +59,7 @@ exports.addTale = async (req, res) => {
     userId: req.userId,
     title: req.body.title,
     description: req.body.description,
-    thumbnailUrl: req.fileUrl,
+    thumbnailUrl: req.fileUrl && req.fileUrl[0],
     categoryId: req.body.categoryId,
     tags: req.body.tags,
     expectedStoryCount: req.body.expectedStoryCount,
