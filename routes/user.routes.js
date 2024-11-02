@@ -1,8 +1,7 @@
 const controller = require("../controller/user.controller");
 const { fileUploadMiddleware } = require("../middleware/fileupload.middleware");
-const {
-  firebaseAuthMiddleware,
-} = require("../middleware/firebaseauth.middleware");
+const { firebaseAuthMiddleware } = require("../middleware/firebaseauth.middleware");
+const multerMiddleware = require('../middleware/multer.middleware')
 
 module.exports = (app) => {
   app.use((req, res, next) => {
@@ -19,12 +18,12 @@ module.exports = (app) => {
   app.get("/api/v1/user/:id", firebaseAuthMiddleware, controller.getUserById);
   app.post(
     "/api/v1/user",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.addUser
   );
   app.put(
     "/api/v1/user/:id",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.updateUser
   );
   app.put(

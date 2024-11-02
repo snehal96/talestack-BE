@@ -3,17 +3,60 @@ const TrendingTale = require("../models").trendingtale;
 const { nanoid } = require("nanoid");
 
 exports.getAllTales = async (page = 0, limit = 20) => {
-  return await Tale.find({}, { _id: 0 })
-    .skip(page * limit)
-    .limit(limit)
-    .exec();
+  return await Tale.aggregate([
+    {
+      $lookup: {
+        from: 'userinfos', // The name of the user collection
+        localField: 'createdBy', // Field from the post collection
+        foreignField: 'entityId', // Field from the user collection
+        as: 'userInfo', // Output array field
+      },
+    },
+    {
+      $unwind: {
+        path: '$userInfo',
+        preserveNullAndEmptyArrays: true, // Keeps posts without user info
+      },
+    },
+    {
+      $project: {
+        _id: 0, // Exclude the _id field from the output
+        'userInfo._id': 0, // Exclude _id from the embedded userInfo object
+      },
+    },
+    { $skip: page * limit },
+    { $limit: limit }
+  ])
 };
 
 exports.getTaleByUserId = async (userId, page = 0, limit = 20) => {
-  return await Tale.find({ createdBy: userId }, { _id: 0 })
-    .skip(page * limit)
-    .limit(limit)
-    .exec();
+  return await Tale.aggregate([
+    {
+      $match: { createdBy: userId }, // Filter tales by userid
+    },
+    {
+      $lookup: {
+        from: 'userinfos', // The name of the user collection
+        localField: 'createdBy', // Field from the tale collection
+        foreignField: 'entityId', // Field from the user collection
+        as: 'userInfo', // Output array field
+      },
+    },
+    {
+      $unwind: {
+        path: '$userInfo',
+        preserveNullAndEmptyArrays: true, // Keeps tales without user info
+      },
+    },
+    {
+      $project: {
+        _id: 0, // Exclude the _id field from the output
+        'userInfo._id': 0, // Exclude _id from the embedded userInfo object
+      },
+    },
+    { $skip: page * limit },
+    { $limit: limit }
+  ])
 };
 
 exports.getTaleByCategoryId = async (categoryId, page = 0, limit = 20) => {

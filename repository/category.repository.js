@@ -19,7 +19,7 @@ exports.addCategory = async ({ userId, name, thumbnailUrl }) => {
     updatedDate: creationDate,
     status: "ACTIVE",
     name: name,
-    thumbnailUrl: thumbnailUrl,
+    thumbnailUrl: thumbnailUrl
   });
   return await categoryObj.save();
 };

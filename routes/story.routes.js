@@ -1,8 +1,7 @@
 const controller = require("../controller/story.controller");
 const { fileUploadMiddleware } = require("../middleware/fileupload.middleware");
-const {
-  firebaseAuthMiddleware,
-} = require("../middleware/firebaseauth.middleware");
+const { firebaseAuthMiddleware } = require("../middleware/firebaseauth.middleware");
+const multerMiddleware = require('../middleware/multer.middleware')
 
 module.exports = (app) => {
   app.use((req, res, next) => {
@@ -27,12 +26,12 @@ module.exports = (app) => {
   );
   app.post(
     "/api/v1/story/active",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.array('images')],
     controller.addStory
   );
   app.put(
     "/api/v1/story/active/:id",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.array('images')],
     controller.updateStory
   );
 
@@ -53,18 +52,18 @@ module.exports = (app) => {
   );
   app.post(
     "/api/v1/story/draft",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.array('images')],
     controller.addDraftStory
   );
   app.put(
     "/api/v1/story/draft/:id",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.array('images')],
     controller.updateDraftStory
   );
 
   app.post(
     "/api/v1/story/upload/image",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.array('images')],
     controller.uploadImage
   );
 };

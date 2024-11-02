@@ -6,10 +6,12 @@ const UserInfo = mongoose.model(
   new mongoose.Schema({
     ...base.base,
     email: String,
+    username: String,
     name: String,
     tagline: String,
     bio: String,
     profileImageUrl: String,
+    isOnboarded: Boolean
   })
 );
 

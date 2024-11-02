@@ -12,7 +12,7 @@ exports.getAllUsers = async (req, res) => {
 exports.getUserById = async (req, res) => {
   try {
     const data = await UserRepository.getUserByUserId(req.userId);
-    res.status(200).send({ success: true, error: false, data: data });
+    res.status(200).send({ success: true, error: false, data: data});
   } catch (err) {
     res.status(400).send({ success: false, error: true, message: err });
   }
@@ -31,6 +31,8 @@ exports.addUser = async (req, res) => {
   const user = {
     userId: req.userId,
     email: req.body.email,
+    mobile: req.body.mobile,
+    username: req.body.username,
     name: req.body.name,
     tagline: req.body.tagline,
     bio: req.body.bio,
@@ -55,6 +57,12 @@ exports.updateUser = async (req, res) => {
   }
   if (req.body.email) {
     query["email"] = req.body.email;
+  }
+  if (req.body.mobile) {
+    query["mobile"] = req.body.mobile;
+  }
+  if (req.body.username) {
+    query["email"] = req.body.username;
   }
   if (req.body.profileImageUrl) {
     query["profileImageUrl"] = req.fileUrl;

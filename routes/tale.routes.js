@@ -1,10 +1,9 @@
 const controller = require("../controller/tale.controller");
 const { fileUploadMiddleware } = require("../middleware/fileupload.middleware");
-const {
-  firebaseAuthMiddleware,
-} = require("../middleware/firebaseauth.middleware");
+const { firebaseAuthMiddleware} = require("../middleware/firebaseauth.middleware");
+const multerMiddleware = require('../middleware/multer.middleware')
 
-module.exports = (app, fileUpload) => {
+module.exports = (app) => {
   app.use((req, res, next) => {
     res.header(
       "Access-Control-Allow-Headers",
@@ -29,12 +28,12 @@ module.exports = (app, fileUpload) => {
   app.get("/api/v1/tale/:id", firebaseAuthMiddleware, controller.getTaleById);
   app.post(
     "/api/v1/tale",
-    [firebaseAuthMiddleware, fileUpload.single('thumbnail'), fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.addTale
   );
   app.put(
     "/api/v1/tale/:id",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.updateTale
   );
 

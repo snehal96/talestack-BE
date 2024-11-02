@@ -59,9 +59,9 @@ exports.addTale = async (req, res) => {
     userId: req.userId,
     title: req.body.title,
     description: req.body.description,
-    thumbnailUrl: req.fileUrl && req.fileUrl[0],
+    thumbnailUrl: req.fileUrl,
     categoryId: req.body.categoryId,
-    tags: req.body.tags,
+    tags: JSON.parse(req.body.tags),
     expectedStoryCount: req.body.expectedStoryCount,
   };
   try {

@@ -23,7 +23,7 @@ exports.getCategoryById = async (req, res) => {
 exports.addCategory = async (req, res) => {
   try {
     await CategoryRepository.addCategory({
-      userId: req.userId,
+      userId: req.userId || 'SYSTEM',
       name: req.body.name,
       thumbnailUrl: req.fileUrl,
     });

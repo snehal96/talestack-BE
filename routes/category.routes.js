@@ -1,8 +1,7 @@
 const controller = require("../controller/category.controller");
 const { fileUploadMiddleware } = require("../middleware/fileupload.middleware");
-const {
-  firebaseAuthMiddleware,
-} = require("../middleware/firebaseauth.middleware");
+const { firebaseAuthMiddleware } = require("../middleware/firebaseauth.middleware");
+const multerMiddleware = require('../middleware/multer.middleware')
 
 module.exports = (app) => {
   app.use((req, res, next) => {
@@ -27,12 +26,12 @@ module.exports = (app) => {
   );
   app.post(
     "/api/v1/category",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.addCategory
   );
   app.put(
     "/api/v1/category/:id",
-    [firebaseAuthMiddleware, fileUploadMiddleware],
+    [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.updateCategory
   );
 };

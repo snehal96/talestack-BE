@@ -19,6 +19,8 @@ exports.getUserByUserId = async (userId) => {
 exports.addUser = async ({
   userId,
   email,
+  mobile,
+  username,
   name,
   tagline,
   bio,
@@ -34,10 +36,13 @@ exports.addUser = async ({
     updatedDate: creationDate,
     status: status,
     email,
+    mobile,
+    username,
     name,
     tagline,
     bio,
     profileImageUrl,
+    isOnboarded: true
   });
 
   return await userObj.save();

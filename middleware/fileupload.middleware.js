@@ -3,6 +3,8 @@ const AWS = require("aws-sdk");
 const awsAccountConfig = require("../config/fileupload.config.json");
 
 exports.fileUploadMiddleware = (req, res, next) => {
+  next()
+  return
   if (req.body.files || req.body.file) {
     var credentials = new AWS.SharedIniFileCredentials()
     AWS.config.credentials = credentials
