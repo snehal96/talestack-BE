@@ -1,8 +1,8 @@
 const TaleRepository = require("../repository/tale.repository");
 
-exports.getAllTales = async (req, res) => {
+exports.getAllPublicTales = async (req, res) => {
   try {
-    const data = await TaleRepository.getAllTales(req.query.page);
+    const data = await TaleRepository.getAllPublicTales(req.query.page);
     res.status(200).send({ success: true, error: false, data: data });
   } catch (err) {
     res.status(400).send({ success: false, error: true, message: err });
@@ -25,6 +25,7 @@ exports.getTaleByUserId = async (req, res) => {
   try {
     const data = await TaleRepository.getTaleByUserId(
       req.params.userId,
+      req.userId,
       req.query.page
     );
     res.status(200).send({ success: true, error: false, data: data });
@@ -47,7 +48,7 @@ exports.getTaleByCategoryId = async (req, res) => {
 
 exports.getTaleById = async (req, res) => {
   try {
-    const data = await TaleRepository.getTaleById(req.params.id);
+    const data = await TaleRepository.getTaleById(req.params.id, req.query.userId, req.userId);
     res.status(200).send({ success: true, error: false, data: data });
   } catch (err) {
     res.status(400).send({ success: false, error: true, message: err });
@@ -57,6 +58,7 @@ exports.getTaleById = async (req, res) => {
 exports.addTale = async (req, res) => {
   const tale = {
     userId: req.userId,
+    type: req.body.tale,
     title: req.body.title,
     description: req.body.description,
     thumbnailUrl: req.fileUrl,
@@ -76,7 +78,14 @@ exports.addTale = async (req, res) => {
 };
 
 exports.updateTale = async (req, res) => {
+  if (req.body.userId !== req.userId) {
+    res.status(403).send({ success: false, error: true, message: 'Unauthorized action' });
+    return
+  }
   const query = {};
+  if (req.body.type) {
+    query["type"] = req.body.type;
+  }
   if (req.body.status) {
     query["status"] = req.body.status;
   }

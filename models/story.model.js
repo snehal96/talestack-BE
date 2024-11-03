@@ -6,13 +6,27 @@ const Story = mongoose.model(
   new mongoose.Schema({
     ...base.base,
     taleId: String,
+    private: Boolean,
+    type: String,
     title: String,
     content: String,
     storyOrder: Number,
-    hasDraft: {
-      type: Boolean,
-      default: false,
+    likeCount: {
+      type: Number,
+      default: 0
     },
+    shareCount: {
+      type: Number,
+      default: 0
+    },
+    commentCount: {
+      type: Number,
+      default: 0
+    },
+    cloneCount: {
+      type: Number,
+      default: 0
+    }
   })
 );
 

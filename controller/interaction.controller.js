@@ -1,41 +1,51 @@
 const InteractionRepository = require("../repository/interaction.repository");
+const UserRepository = require("../repository/user.repository")
 
-const followUser = async (userId, entityId) => {
-  return await InteractionRepository.addFollowerByUserId(userId, entityId);
+const followUser = async (requestorId, entityId) => {
+  const isPrivate = await UserRepository.getUserVisibilityStatus(entityId)
+  if (isPrivate) {
+    return await InteractionRepository.addFollowRequestByUserId(requestorId, userId)
+  }
+  return await InteractionRepository.addFollowerByUserId(requestorId, entityId);
 };
 
-const unfollowUser = async (userId, entityId) => {
-  return await InteractionRepository.removeFollowerByUserId(userId, entityId);
+const acceptFollowUser = async (userId, requestorId) => {
+  await InteractionRepository.addFollowerByUserId(requestorId, entityId);
+  return await InteractionRepository.removeFollowRequestByUserId(requestorId, userId)
+}
+
+const unfollowUser = async (requestorId, entityId) => {
+  return await InteractionRepository.removeFollowerByUserId(requestorId, entityId);
 };
 
-const followCategory = async (userId, entityId) => {
+const followCategory = async (requestorId, entityId) => {
   return await InteractionRepository.addFollowedCategoryByUserId(
-    userId,
+    requestorId,
     entityId
   );
 };
 
-const unfollowCategory = async (userId, entityId) => {
+const unfollowCategory = async (requestorId, entityId) => {
   return await InteractionRepository.removeFollowedCategoryByUserId(
-    userId,
+    requestorId,
     entityId
   );
 };
 
-const saveTale = async (userId, entityId) => {
-  return await InteractionRepository.addSavedTaleByUserId(userId, entityId);
+const saveTale = async (requestorId, entityId) => {
+  return await InteractionRepository.addSavedTaleByUserId(requestorId, entityId);
 };
 
-const unsaveTale = async (userId, entityId) => {
-  return await InteractionRepository.removeSavedTaleByUserId(userId, entityId);
+const unsaveTale = async (requestorId, entityId) => {
+  return await InteractionRepository.removeSavedTaleByUserId(requestorId, entityId);
 };
 
-const likeStory = async (userId, entityId) => {
-  return await InteractionRepository.addLikedStoryByUserId(userId, entityId);
+const likeStory = async (requestorId, entityId) => {
+  return await InteractionRepository.addLikedStoryByUserId(requestorId, entityId);
 };
 
-const unlikeStory = async (userId, entityId) => {
-  return await InteractionRepository.removeLikedStoryByUserId(userId, entityId);
+const unlikeStory = async (requestorId, entityId) => {
+  return await InteractionRepository.removeLikedStoryByUserId(requestorId, entityId);
 };
 
 exports.interactionHandler = async (req, res) => {
@@ -48,6 +58,8 @@ exports.interactionHandler = async (req, res) => {
         await followUser(req.userId, req.body.id);
       } else if (type === "unfollow") {
         await unfollowUser(req.userId, req.body.id);
+      } else if (type === 'accept') {
+        await acceptFollowUser(req.userId, req.body.id)
       }
     } else if (entity === "category") {
       if (type === "follow") {

@@ -7,24 +7,24 @@ exports.getStoryByTaleId = async (taleId) => {
   return await Story.find({ taleId: taleId }, { _id: 0 }).exec();
 };
 
-exports.getDraftStoryByTaleId = async (taleId) => {
-  return await DraftStory.find({ taleId: taleId }, { _id: 0 }).exec();
+exports.getDraftStoryByTaleId = async (taleId, userId) => {
+  return await DraftStory.find({ taleId: taleId, createdBy: userId }, { _id: 0 }).exec();
 };
 
 exports.getDraftStoryByUserId = async (userId) => {
-  return await DraftStory.find({ userId: userId }, { _id: 0 }).exec();
+  return await DraftStory.find({ createdBy: userId }, { _id: 0 }).exec();
 };
 
 exports.getStoryById = async (id) => {
   return await Story.findOne({ entityId: id }, { _id: 0 }).exec();
 };
 
-exports.getDraftStoryByStoryId = async (id) => {
-  return await DraftStory.findOne({ storyId: id }, { _id: 0 }).exec();
+exports.getDraftStoryByStoryId = async (id, userId) => {
+  return await DraftStory.findOne({ storyId: id, createdBy: userId  }, { _id: 0 }).exec();
 };
 
-exports.getDraftStoryById = async (id) => {
-  return await DraftStory.findOne({ entityId: id }, { _id: 0 }).exec();
+exports.getDraftStoryById = async (id, userId) => {
+  return await DraftStory.findOne({ entityId: id, createdBy: userId }, { _id: 0 }).exec();
 };
 
 exports.addStory = async ({

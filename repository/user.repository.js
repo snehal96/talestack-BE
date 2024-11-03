@@ -151,3 +151,7 @@ exports.getTrendingUser = async (page = 0, limit = 20) => {
 
   return await UserInfo.find({ entityId: { $in: trendingUser } }).exec();
 };
+
+exports.getUserVisibilityStatus = async (userId) => {
+  return await UserInfo.findOne({entityId: userId}, { private: 1 }).exec()
+}

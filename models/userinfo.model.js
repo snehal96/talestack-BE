@@ -11,7 +11,11 @@ const UserInfo = mongoose.model(
     tagline: String,
     bio: String,
     profileImageUrl: String,
-    isOnboarded: Boolean
+    isOnboarded: Boolean,
+    private: {
+      type: Boolean,
+      default: true
+    }
   })
 );
 

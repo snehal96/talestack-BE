@@ -14,7 +14,7 @@ module.exports = (app) => {
     next();
   });
 
-  app.get("/api/v1/tale", firebaseAuthMiddleware, controller.getAllTales);
+  app.get("/api/v1/tale", firebaseAuthMiddleware, controller.getAllPublicTales);
   app.get(
     "/api/v1/tale/user/:userId",
     firebaseAuthMiddleware,

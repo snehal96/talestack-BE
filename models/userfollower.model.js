@@ -6,7 +6,7 @@ const UserFollower = mongoose.model(
   new mongoose.Schema({
     ...base.baseInteraction,
     userId: String,
-    followerId: String,
+    followingId: String,
   })
 );
 

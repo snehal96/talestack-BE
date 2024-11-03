@@ -17,5 +17,8 @@ db.userfollower = require("./userfollower.model");
 db.userfollowingcategory = require("./userfollowingcategory.model");
 db.userlikedstory = require("./userlikedstory.model");
 db.usersavedtale = require("./usersavedtale.model");
+db.userclosegroup = require("./userclosegroup.model");
+db.userclosegroupmember = require("./userclosegroupmember.model");
+db.userfollowrequest = require("./userfollowrequest.model");
 
 module.exports = db;

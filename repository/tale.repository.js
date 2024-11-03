@@ -1,9 +1,21 @@
-const Tale = require("../models").tale;
-const TrendingTale = require("../models").trendingtale;
+const db = require("../models")
+const Tale = db.tale;
+const TrendingTale = db.trendingtale;
+const InteractionRepository = require("../repository/interaction.repository")
 const { nanoid } = require("nanoid");
 
-exports.getAllTales = async (page = 0, limit = 20) => {
+async function getFollowStatus (query, userId, requestorId) {
+  const isFollowing = await InteractionRepository.getFollowStatus(userId, requestorId)
+  if (userId !== requestorId && !isFollowing) {
+    query[private] = false
+  }
+}
+
+exports.getAllPublicTales = async (page = 0, limit = 20) => {
   return await Tale.aggregate([
+    {
+      $match: { private: false, premium: false }
+    },
     {
       $lookup: {
         from: 'userinfos', // The name of the user collection
@@ -29,10 +41,12 @@ exports.getAllTales = async (page = 0, limit = 20) => {
   ])
 };
 
-exports.getTaleByUserId = async (userId, page = 0, limit = 20) => {
+exports.getTaleByUserId = async (userId, requestorId, page = 0, limit = 20) => {
+  const query = { createdBy: userId }
+  await getFollowStatus(query, userId, requestorId)
   return await Tale.aggregate([
     {
-      $match: { createdBy: userId }, // Filter tales by userid
+      $match: query, // Filter tales by userid
     },
     {
       $lookup: {
@@ -60,17 +74,21 @@ exports.getTaleByUserId = async (userId, page = 0, limit = 20) => {
 };
 
 exports.getTaleByCategoryId = async (categoryId, page = 0, limit = 20) => {
-  return await Tale.find({ categoryId: categoryId }, { _id: 0 })
+  const query = { categoryId: categoryId, private: false }
+  return await Tale.find(query, { _id: 0 })
     .skip(page * limit)
     .limit(limit)
     .exec();
 };
 
-exports.getTaleById = async (id) => {
-  return await Tale.findOne({ entityId: id }, { _id: 0 }).exec();
+exports.getTaleById = async (id, userId, requestorId) => {
+  const query = { entityId: id }
+  await getFollowStatus(query, userId, requestorId)
+  return await Tale.findOne(query, { _id: 0 }).exec();
 };
 
 exports.addTale = async ({
+  type,
   title,
   thumbnailUrl,
   description,
@@ -89,6 +107,7 @@ exports.addTale = async ({
     updatedBy: "",
     updatedDate: creationDate,
     status: status,
+    type,
     title,
     thumbnailUrl,
     description,
@@ -135,8 +154,9 @@ exports.createTrendingTale = async (taleId) => {
   return await trendingTaleObj.save();
 };
 
-exports.getTaleByQuery = async (query, page = 0) => {
-  return await Tale.find({ title: { $regex: query, $options: "i" } })
+exports.getTaleByQuery = async (term, page = 0) => {
+  const query = { title: { $regex: term, $options: "i" }, private: false }
+  return await Tale.find(query)
     .skip(page * 10)
     .limit(10);
 };
