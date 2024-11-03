@@ -40,9 +40,11 @@ exports.updateCategory = async (req, res) => {
     if (req.fileUrl) {
       query["thumbnailUrl"] = req.fileUrl;
     }
-
     if (req.body.name) {
       query["name"] = req.body.name;
+    }
+    if (req.body.delete) {
+      query["isDeleted"] = true
     }
     await CategoryRepository.updateCategory(req.userId, req.body.id, query);
     res.status(200).send({ success: true, error: false });

@@ -76,6 +76,9 @@ exports.updateUser = async (req, res) => {
   if (req.body.bio) {
     query["bio"] = req.body.bio;
   }
+  if (req.body.delete) {
+    query["isDeleted"] = true
+  }
 
   try {
     await UserRepository.updateUser(req.userId, query);

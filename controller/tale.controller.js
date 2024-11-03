@@ -106,6 +106,9 @@ exports.updateTale = async (req, res) => {
   if (req.body.expectedStoryCount) {
     query["expectedStoryCount"] = req.body.expectedStoryCount;
   }
+  if (req.body.delete) {
+    query["isDeleted"] = true
+  }
 
   try {
     await TaleRepository.updateTale(req.userId, req.body.taleId, query);

@@ -4,27 +4,27 @@ const DraftStory = db.draftstory;
 const { nanoid } = require("nanoid");
 
 exports.getStoryByTaleId = async (taleId) => {
-  return await Story.find({ taleId: taleId }, { _id: 0 }).exec();
+  return await Story.find({ taleId: taleId, isDeleted: false }, { _id: 0 }).exec();
 };
 
 exports.getDraftStoryByTaleId = async (taleId, userId) => {
-  return await DraftStory.find({ taleId: taleId, createdBy: userId }, { _id: 0 }).exec();
+  return await DraftStory.find({ taleId: taleId, createdBy: userId, isDeleted: false }, { _id: 0 }).exec();
 };
 
 exports.getDraftStoryByUserId = async (userId) => {
-  return await DraftStory.find({ createdBy: userId }, { _id: 0 }).exec();
+  return await DraftStory.find({ createdBy: userId, isDeleted: false }, { _id: 0 }).exec();
 };
 
 exports.getStoryById = async (id) => {
-  return await Story.findOne({ entityId: id }, { _id: 0 }).exec();
+  return await Story.findOne({ entityId: id, isDeleted: false }, { _id: 0 }).exec();
 };
 
 exports.getDraftStoryByStoryId = async (id, userId) => {
-  return await DraftStory.findOne({ storyId: id, createdBy: userId  }, { _id: 0 }).exec();
+  return await DraftStory.findOne({ storyId: id, createdBy: userId, isDeleted: false  }, { _id: 0 }).exec();
 };
 
 exports.getDraftStoryById = async (id, userId) => {
-  return await DraftStory.findOne({ entityId: id, createdBy: userId }, { _id: 0 }).exec();
+  return await DraftStory.findOne({ entityId: id, createdBy: userId, isDeleted: false }, { _id: 0 }).exec();
 };
 
 exports.addStory = async ({
@@ -62,7 +62,7 @@ exports.updateStory = async (userId, storyId, query) => {
   };
 
   return await Story.updateOne(
-    { entityId: storyId },
+    { entityId: storyId, createdBy: userId },
     { $set: updateQuery }
   ).exec();
 };
@@ -100,7 +100,7 @@ exports.updateDraftStory = async (userId, storyId, query) => {
   };
 
   return await DraftStory.updateOne(
-    { storyId: storyId },
+    { storyId: storyId, createdBy: userId },
     { $set: updateQuery }
   ).exec();
 };

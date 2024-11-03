@@ -126,25 +126,21 @@ exports.addDraftStory = async (req, res) => {
 
 exports.updateStory = async (req, res) => {
   try {
-    if (req.body.userId !== req.userId) {
-      res.status(403).send({ success: false, error: true, message: 'Unauthorized action' });
-      return
-    }
     const query = {};
     if (req.body.type) {
       query["type"] = req.body.type;
     }
-
     if (req.body.title) {
       query["title"] = req.body.title;
     }
-
     if (req.body.content) {
       query["content"] = req.body.content;
     }
-
     if (req.body.action) {
       query["status"] = req.body.action;
+    }
+    if (req.body.delete) {
+      query["isDeleted"] = true
     }
 
     await StoryRepository.updateStory(req.userId, req.body.storyId, query);
@@ -166,17 +162,17 @@ exports.updateDraftStory = async (req, res) => {
     if (req.body.type) {
       query["type"] = req.body.type;
     }
-
     if (req.body.title) {
       query["title"] = req.body.title;
     }
-
     if (req.body.content) {
       query["content"] = req.body.content;
     }
-
     if (req.body.action) {
       query["status"] = req.body.action;
+    }
+    if (req.body.delete) {
+      query["isDeleted"] = true
     }
 
     await StoryRepository.updateDraftStory(req.userId, req.body.storyId, query);
