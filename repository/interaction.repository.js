@@ -3,8 +3,7 @@ const Category = db.category;
 const UserFollowRequest = db.userfollowrequest
 const UserFollower = db.userfollower;
 const UserFollowingCategory = db.userfollowingcategory;
-const UserLikedStory = db.userlikedstory;
-const UserSavedTale = db.usersavedtale;
+const UserInteraction = db.userinteraction;
 const UserInfo = db.userinfo;
 const Tale = db.tale;
 const Story = db.story;
@@ -39,13 +38,18 @@ exports.getFollowedCategoryByUserId = async (userId) => {
   return await Category.find({ entityId: { $in: data } }, { _id: 0 }).exec();
 };
 
+exports.getLikedTaleByUserId = async (userId) => {
+  const data = await UserInteraction.find({ userId: userId, entityType: 'TALE', interactionType: 'LIKE' }, "entityId").exec();
+  return await Tale.find({ entityId: { $in: data } }, { _id: 0 }).exec();
+};
+
 exports.getSavedTaleByUserId = async (userId) => {
-  const data = await UserSavedTale.find({ userId: userId }, "taleId").exec();
+  const data = await UserInteraction.find({ userId: userId, entityType: 'TALE', interactionType: 'SAVE' }, "entityId").exec();
   return await Tale.find({ entityId: { $in: data } }, { _id: 0 }).exec();
 };
 
 exports.getLikedStoryByUserId = async (userId) => {
-  const data = await UserLikedStory.find({ userId: userId }, "storyId").exec();
+  const data = await UserInteraction.find({ userId: userId, entityType: 'STORY', interactionType: 'LIKE' }, "entityId").exec();
   return await Story.find({ entityId: { $in: data } }, { _id: 0 }).exec();
 };
 
@@ -79,24 +83,40 @@ exports.addFollowedCategoryByUserId = async (userId, categoryId) => {
   return await followedCategory.save();
 };
 
-exports.addSavedTaleByUserId = async (userId, taleId) => {
-  const userSavedTale = new UserSavedTale({
+exports.addLikedTaleByUserId = async (userId, entityId) => {
+  const userInteraction = new UserInteraction({
     createdDate: new Date(),
     userId,
-    taleId,
+    entityId,
+    entityType: 'TALE',
+    interactionType: 'LIKE'
   });
 
-  return await userSavedTale.save();
+  return await userInteraction.save();
 };
 
-exports.addLikedStoryByUserId = async (userId, storyId) => {
-  const userLikedStory = new UserLikedStory({
+exports.addSavedTaleByUserId = async (userId, entityId) => {
+  const userInteraction = new UserInteraction({
     createdDate: new Date(),
     userId,
-    storyId,
+    entityId,
+    entityType: 'TALE',
+    interactionType: 'SAVE'
   });
 
-  return await userLikedStory.save();
+  return await userInteraction.save();
+};
+
+exports.addLikedStoryByUserId = async (userId, entityId) => {
+  const userInteraction = new UserInteraction({
+    createdDate: new Date(),
+    userId,
+    entityId,
+    entityType: 'STORY',
+    interactionType: 'LIKE'
+  });
+
+  return await userInteraction.save();
 };
 
 exports.removeFollowRequestByUserId = async (userId, followingId) => {
@@ -120,16 +140,29 @@ exports.removeFollowedCategoryByUserId = async (userId, categoryId) => {
   }).exec();
 };
 
-exports.removeSavedTaleByUserId = async (userId, taleId) => {
-  return await UserSavedTale.deleteOne({
+exports.removeLikedTaleByUserId = async (userId, entityId) => {
+  return await UserInteraction.deleteOne({
     userId,
-    taleId,
+    entityId,
+    entityType: 'TALE',
+    interactionType: 'LIKE'
   }).exec();
 };
 
-exports.removeLikedStoryByUserId = async (userId, storyId) => {
-  return await UserLikedStory.deleteOne({
+exports.removeSavedTaleByUserId = async (userId, entityId) => {
+  return await UserInteraction.deleteOne({
     userId,
-    storyId,
+    entityId,
+    entityType: 'TALE',
+    interactionType: 'SAVE'
+  }).exec();
+};
+
+exports.removeLikedStoryByUserId = async (userId, entityId) => {
+  return await UserInteraction.deleteOne({
+    userId,
+    entityId,
+    entityType: 'STORY',
+    interactionType: 'LIKE'
   }).exec();
 };

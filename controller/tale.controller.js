@@ -1,4 +1,5 @@
 const TaleRepository = require("../repository/tale.repository");
+const UserRepository = require("../repository/user.repository")
 
 exports.getAllPublicTales = async (req, res) => {
   try {
@@ -69,6 +70,7 @@ exports.addTale = async (req, res) => {
   try {
     const taleId = await TaleRepository.addTale(tale);
     await TaleRepository.createTrendingTale(taleId);
+    await UserRepository.updateFollowerCount(userId, 'taleCount')
     res
       .status(200)
       .send({ success: true, error: false, message: "operation successful" });

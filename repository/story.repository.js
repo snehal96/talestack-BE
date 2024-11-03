@@ -104,3 +104,10 @@ exports.updateDraftStory = async (userId, storyId, query) => {
     { $set: updateQuery }
   ).exec();
 };
+
+exports.updateInteractionCount = async (storyId, field, count = 1) => {
+  return await Story.updateOne(
+    { entityId: storyId },
+    { $inc: { [field]: count } }
+  ).exec();
+};

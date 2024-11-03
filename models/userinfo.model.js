@@ -15,6 +15,18 @@ const UserInfo = mongoose.model(
     private: {
       type: Boolean,
       default: true
+    },
+    followerCount: {
+      type: Number,
+      default: 0
+    },
+    followingCount: {
+      type: Number,
+      default: 0
+    },
+    taleCount: {
+      type: Number,
+      default: 0
     }
   })
 );

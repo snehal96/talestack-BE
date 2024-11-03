@@ -155,3 +155,10 @@ exports.getTrendingUser = async (page = 0, limit = 20) => {
 exports.getUserVisibilityStatus = async (userId) => {
   return await UserInfo.findOne({entityId: userId}, { private: 1 }).exec()
 }
+
+exports.updateFollowerCount = async (userId, field, count = 1) => {
+  return await UserInfo.updateOne(
+    { entityId: userId },
+    { $inc: { [field]: count } }
+  ).exec();
+}

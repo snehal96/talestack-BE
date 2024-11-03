@@ -1,21 +1,30 @@
 const InteractionRepository = require("../repository/interaction.repository");
-const UserRepository = require("../repository/user.repository")
+const UserRepository = require("../repository/user.repository");
+const TaleRepository = require("../repository/tale.repository");
+const StoryRepository = require("../repository/story.repository");
 
 const followUser = async (requestorId, entityId) => {
   const isPrivate = await UserRepository.getUserVisibilityStatus(entityId)
   if (isPrivate) {
     return await InteractionRepository.addFollowRequestByUserId(requestorId, userId)
+  } else {
+    await InteractionRepository.addFollowerByUserId(requestorId, entityId);
+    await UserRepository.updateFollowerCount(entityId, 'followerCount')
+    await UserRepository.updateFollowerCount(requestorId, 'followingCount')
   }
-  return await InteractionRepository.addFollowerByUserId(requestorId, entityId);
 };
 
 const acceptFollowUser = async (userId, requestorId) => {
   await InteractionRepository.addFollowerByUserId(requestorId, entityId);
-  return await InteractionRepository.removeFollowRequestByUserId(requestorId, userId)
+  await InteractionRepository.removeFollowRequestByUserId(requestorId, userId)
+  await UserRepository.updateFollowerCount(entityId, 'followerCount')
+  await UserRepository.updateFollowerCount(requestorId, 'followingCount')
 }
 
 const unfollowUser = async (requestorId, entityId) => {
-  return await InteractionRepository.removeFollowerByUserId(requestorId, entityId);
+  await InteractionRepository.removeFollowerByUserId(requestorId, entityId);
+  await UserRepository.updateFollowerCount(entityId,'followerCount', -1)
+  await UserRepository.updateFollowerCount(requestorId, 'followingCount', -1)
 };
 
 const followCategory = async (requestorId, entityId) => {
@@ -32,20 +41,42 @@ const unfollowCategory = async (requestorId, entityId) => {
   );
 };
 
+const likeTale = async (requestorId, entityId) => {
+  await InteractionRepository.addLikedTaleByUserId(requestorId, entityId);
+  await TaleRepository.updateStoryOrInteractionCount(entityId, 'likeCount')
+};
+
+const unlikeTale = async (requestorId, entityId) => {
+  await InteractionRepository.removeLikedTaleByUserId(requestorId, entityId);
+  await TaleRepository.updateStoryOrInteractionCount(entityId, 'likeCount', -1)
+};
+
 const saveTale = async (requestorId, entityId) => {
-  return await InteractionRepository.addSavedTaleByUserId(requestorId, entityId);
+  await InteractionRepository.addSavedTaleByUserId(requestorId, entityId);
+  await TaleRepository.updateStoryOrInteractionCount(entityId, 'saveCount')
 };
 
 const unsaveTale = async (requestorId, entityId) => {
-  return await InteractionRepository.removeSavedTaleByUserId(requestorId, entityId);
+  await InteractionRepository.removeSavedTaleByUserId(requestorId, entityId);
+  await TaleRepository.updateStoryOrInteractionCount(entityId, 'saveCount')
+};
+
+const shareTale = async (entityId) => {
+  await TaleRepository.updateStoryOrInteractionCount(entityId, 'shareCount')
 };
 
 const likeStory = async (requestorId, entityId) => {
-  return await InteractionRepository.addLikedStoryByUserId(requestorId, entityId);
+  await InteractionRepository.addLikedStoryByUserId(requestorId, entityId);
+  await StoryRepository.updateInteractionCount(entityId, 'likeCount')
 };
 
 const unlikeStory = async (requestorId, entityId) => {
-  return await InteractionRepository.removeLikedStoryByUserId(requestorId, entityId);
+  await InteractionRepository.removeLikedStoryByUserId(requestorId, entityId);
+  await StoryRepository.updateInteractionCount(entityId, 'likeCount', -1)
+};
+
+const shareStory = async (entityId) => {
+  await StoryRepository.updateInteractionCount(entityId, 'shareCount')
 };
 
 exports.interactionHandler = async (req, res) => {
@@ -72,12 +103,20 @@ exports.interactionHandler = async (req, res) => {
         await saveTale(req.userId, req.body.id);
       } else if (type === "unsave") {
         await unsaveTale(req.userId, req.body.id);
+      } else if (type === "like") {
+        await likeTale(req.userId, req.body.id);
+      } else if (type === "unlike") {
+        await unlikeTale(req.userId, req.body.id);
+      } else if (type === "share") {
+        await shareTale(req.body.id);
       }
     } else if (entity === "story") {
       if (type === "like") {
         await likeStory(req.userId, req.body.id);
       } else if (type === "unlike") {
         await unlikeStory(req.userId, req.body.id);
+      } else if (type === "share") {
+        await shareStory(req.body.id);
       }
     } else {
       res.status(404).send({

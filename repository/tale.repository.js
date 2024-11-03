@@ -132,10 +132,10 @@ exports.updateTale = async (userId, taleId, query) => {
   ).exec();
 };
 
-exports.updateStoryCount = async (taleId) => {
+exports.updateStoryOrInteractionCount = async (taleId, field = 'currentStoryCount', count = 1) => {
   return await Tale.updateOne(
     { entityId: taleId },
-    { $inc: { currentStoryCount: 1 } }
+    { $inc: { [field]: count } }
   ).exec();
 };
 
