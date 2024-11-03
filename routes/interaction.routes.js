@@ -20,9 +20,33 @@ module.exports = (app) => {
     controller.getUserSavedTales
   );
 
+  app.get(
+    "/api/v1/interaction/report",
+    firebaseAuthMiddleware,
+    controller.getReports
+  );
+
+  app.get(
+    "/api/v1/interaction/report/:contentId",
+    firebaseAuthMiddleware,
+    controller.getReportByUserAndContent
+  );
+
   app.post(
     "/api/v1/interaction",
     firebaseAuthMiddleware,
     controller.interactionHandler
+  );
+
+  app.post(
+    "/api/v1/interaction/report",
+    firebaseAuthMiddleware,
+    controller.addReport
+  );
+
+  app.put(
+    "/api/v1/interaction/report",
+    firebaseAuthMiddleware,
+    controller.resolveReport
   );
 };

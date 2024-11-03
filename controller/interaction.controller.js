@@ -144,3 +144,63 @@ exports.getUserSavedTales = async (req, res) => {
     });
   }
 };
+
+exports.getReports = async (req, res) => {
+  try {
+    const data = await InteractionRepository.getReport(req.query.page);
+    res.status(200).send({ success: true, error: false, data: data });
+  } catch (e) {
+    res.status(400).send({
+      error: true,
+      message: e,
+    });
+  }
+}
+
+exports.getReportByUserAndContent = async (req, res) => {
+  try {
+    const data = await InteractionRepository.getReportByUserAndContent(req.userId, req.params.contentId);
+    res.status(200).send({ success: true, error: false, data: data });
+  } catch (e) {
+    res.status(400).send({
+      error: true,
+      message: e,
+    });
+  }
+}
+
+exports.addReport = async (req, res) => {
+  try {
+    const body = {
+      userId: req.body.userId,
+      contentId: req.body.contentId,
+      contentType: req.body.contentType,
+      reason: req.body.reason
+    }
+    const data = await InteractionRepository.addReport(body);
+    res.status(201).send({ success: true, error: false, data: data });
+  } catch (e) {
+    res.status(400).send({
+      error: true,
+      message: e,
+    });
+  }
+}
+
+exports.resolveReport = async (req, res) => {
+  try {
+    if (!req.isAdmin) {
+      res.status(403).send({
+        error: true,
+        message: 'Unauthorized action',
+      })
+    }
+    await InteractionRepository.removeReport(req.body.entityId)
+    res.status(200).send({ success: true, error: false, data: "Action Successful" });
+  } catch (e) {
+    res.status(400).send({
+      error: true,
+      message: e,
+    });
+  }
+}

@@ -1,12 +1,13 @@
 const db = require("../models");
 const Category = db.category;
-const UserFollowRequest = db.userfollowrequest
+const UserFollowRequest = db.userfollowrequest;
 const UserFollower = db.userfollower;
 const UserFollowingCategory = db.userfollowingcategory;
 const UserInteraction = db.userinteraction;
 const UserInfo = db.userinfo;
 const Tale = db.tale;
 const Story = db.story;
+const Report = db.report;
 
 exports.getFollowRequestByUserId = async (userId, limit = 20, page = 0) => {
   const data = await UserFollowRequest.find({ userId: userId }, "followingId").exec();
@@ -52,6 +53,14 @@ exports.getLikedStoryByUserId = async (userId) => {
   const data = await UserInteraction.find({ userId: userId, entityType: 'STORY', interactionType: 'LIKE' }, "entityId").exec();
   return await Story.find({ entityId: { $in: data } }, { _id: 0 }).exec();
 };
+
+exports.getReport = async (page = 0, limit = 20) => {
+  return await Report.find({}, { _id: 0 }).skip(page * limit).limit(limit).exec();
+}
+
+exports.getReportByUserAndContent = async (userId, contentId) => {
+  return await Report.countDocuments({ userId, contentId }).exec()
+}
 
 exports.addFollowRequestByUserId = async (userId, followingId) => {
   const follower = new UserFollower({
@@ -119,6 +128,29 @@ exports.addLikedStoryByUserId = async (userId, entityId) => {
   return await userInteraction.save();
 };
 
+exports.addReport = async ({
+  userId,
+  contentId,
+  contentType,
+  reason
+}) => {
+  const creationDate = new Date();
+  const reportId = nanoid(6);
+  const reportObj = Report({
+    entityId: reportId,
+    createdBy: userId,
+    createdDate: creationDate,
+    updatedBy: "",
+    updatedDate: creationDate,
+    status: "ACTIVE",
+    contentId,
+    contentType,
+    reason
+  })
+  await reportObj.save()
+  return reportId
+}
+
 exports.removeFollowRequestByUserId = async (userId, followingId) => {
   return await UserFollowRequest.deleteOne({
     userId,
@@ -166,3 +198,7 @@ exports.removeLikedStoryByUserId = async (userId, entityId) => {
     interactionType: 'LIKE'
   }).exec();
 };
+
+exports.removeReport = async (entityId) => {
+  return await Report.updateOne({ entityId }, { $set: { status: "RESOLVED" }}).exec();
+}

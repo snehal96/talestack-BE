@@ -19,5 +19,6 @@ db.userinteraction = require("./userinteraction.model");
 db.userclosegroup = require("./userclosegroup.model");
 db.userclosegroupmember = require("./userclosegroupmember.model");
 db.userfollowrequest = require("./userfollowrequest.model");
+db.report = require("./report.model");
 
 module.exports = db;
