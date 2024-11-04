@@ -46,6 +46,7 @@ require("./routes/interaction.routes")(app)
 require("./routes/story.routes")(app)
 require("./routes/tale.routes")(app)
 require("./routes/user.routes")(app)
+require("./routes/comment.routes")(app)
 app.use('/api/v1/uploads', express.static('uploads'))
 
 // catch 404 and forward to error handler
