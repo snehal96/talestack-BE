@@ -107,7 +107,7 @@ exports.updateTale = async (req, res) => {
     query["expectedStoryCount"] = req.body.expectedStoryCount
   }
   if (req.body.delete) {
-    query["isDeleted"] = true
+    query["status"] = "DELETED"
   }
 
   try {

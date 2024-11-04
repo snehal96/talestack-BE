@@ -9,9 +9,4 @@ exports.base = {
   updatedBy: String,
   updatedDate: Date,
   status: String,
-  isDeleted: {
-    type: Boolean,
-    default: false,
-    required: true,
-  },
 }

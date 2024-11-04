@@ -14,7 +14,7 @@ async function getFollowStatus (query, userId, requestorId) {
 exports.getAllPublicTales = async (page = 0, limit = 20) => {
   return await Tale.aggregate([
     {
-      $match: { private: false, premium: false, isDeleted: false }
+      $match: { private: false, premium: false, status: { $ne: "DELETED" } }
     },
     {
       $lookup: {
@@ -42,7 +42,7 @@ exports.getAllPublicTales = async (page = 0, limit = 20) => {
 }
 
 exports.getTaleByUserId = async (userId, requestorId, page = 0, limit = 20) => {
-  const query = { createdBy: userId, isDeleted: false }
+  const query = { createdBy: userId, status: { $ne: "DELETED" } }
   await getFollowStatus(query, userId, requestorId)
   return await Tale.aggregate([
     {
@@ -74,7 +74,7 @@ exports.getTaleByUserId = async (userId, requestorId, page = 0, limit = 20) => {
 }
 
 exports.getTaleByCategoryId = async (categoryId, page = 0, limit = 20) => {
-  const query = { categoryId: categoryId, private: false, isDeleted: false }
+  const query = { categoryId: categoryId, private: false, status: { $ne: "DELETED" } }
   return await Tale.find(query, { _id: 0 })
     .skip(page * limit)
     .limit(limit)
@@ -82,7 +82,7 @@ exports.getTaleByCategoryId = async (categoryId, page = 0, limit = 20) => {
 }
 
 exports.getTaleById = async (id, userId, requestorId) => {
-  const query = { entityId: id, isDeleted: false }
+  const query = { entityId: id, status: { $ne: "DELETED" } }
   await getFollowStatus(query, userId, requestorId)
   return await Tale.findOne(query, { _id: 0 }).exec()
 }
@@ -155,7 +155,7 @@ exports.createTrendingTale = async (taleId) => {
 }
 
 exports.getTaleByQuery = async (term, page = 0) => {
-  const query = { title: { $regex: term, $options: "i" }, private: false, isDeleted: false }
+  const query = { title: { $regex: term, $options: "i" }, private: false, status: { $ne: "DELETED" } }
   return await Tale.find(query)
     .skip(page * 10)
     .limit(10)

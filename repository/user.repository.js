@@ -13,7 +13,7 @@ exports.getAllUsers = async (page = 0, limit = 20) => {
 }
 
 exports.getUserByUserId = async (userId) => {
-  return await UserInfo.findOne({ entityId: userId, isDeleted: false }, { _id: 0 }).exec()
+  return await UserInfo.findOne({ entityId: userId, status: { $ne: "DELETED" } }, { _id: 0 }).exec()
 }
 
 exports.addUser = async ({
@@ -77,11 +77,11 @@ exports.createTrendingUser = async (userId) => {
 }
 
 exports.getTrendingTaleByTaleId = async (taleId) => {
-  return await TrendingTale.findOne({ taleId: taleId, isDeleted: false }, { _id: 0 }).exec()
+  return await TrendingTale.findOne({ taleId: taleId, status: { $ne: "DELETED" } }, { _id: 0 }).exec()
 }
 
 exports.getTrendingUserByUserId = async (userId) => {
-  return await TrendingUser.findOne({ userId: userId, isDeleted: false }, { _id: 0 }).exec()
+  return await TrendingUser.findOne({ userId: userId, status: { $ne: "DELETED" } }, { _id: 0 }).exec()
 }
 
 exports.updateTrendingTale = async (taleId, query) => {

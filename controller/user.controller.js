@@ -77,7 +77,7 @@ exports.updateUser = async (req, res) => {
     query["bio"] = req.body.bio
   }
   if (req.body.delete) {
-    query["isDeleted"] = true
+    query["status"] = "DELETED"
   }
 
   try {

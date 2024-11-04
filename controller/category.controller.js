@@ -44,7 +44,7 @@ exports.updateCategory = async (req, res) => {
       query["name"] = req.body.name
     }
     if (req.body.delete) {
-      query["isDeleted"] = true
+      query["status"] = "DELETED"
     }
     await CategoryRepository.updateCategory(req.userId, req.body.id, query)
     res.status(200).send({ success: true, error: false })

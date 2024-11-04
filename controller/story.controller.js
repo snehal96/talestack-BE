@@ -140,7 +140,7 @@ exports.updateStory = async (req, res) => {
       query["status"] = req.body.action
     }
     if (req.body.delete) {
-      query["isDeleted"] = true
+      query["status"] = "DELETED"
     }
 
     await StoryRepository.updateStory(req.userId, req.body.storyId, query)
@@ -172,7 +172,7 @@ exports.updateDraftStory = async (req, res) => {
       query["status"] = req.body.action
     }
     if (req.body.delete) {
-      query["isDeleted"] = true
+      query["status"] = "DELETED"
     }
 
     await StoryRepository.updateDraftStory(req.userId, req.body.storyId, query)
