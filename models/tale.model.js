@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const Tale = mongoose.model(
   "tale",
@@ -55,6 +55,6 @@ const Tale = mongoose.model(
       default: 0
     }
   })
-);
+)
 
-module.exports = Tale;
+module.exports = Tale

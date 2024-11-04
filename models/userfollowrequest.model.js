@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserFollowRequest = mongoose.model(
     "userfollowrequest",
@@ -8,6 +8,6 @@ const UserFollowRequest = mongoose.model(
       userId: String,
       followingId: String
     })
-  );
+  )
   
-  module.exports = UserFollowRequest;
+  module.exports = UserFollowRequest

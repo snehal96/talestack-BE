@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const Story = mongoose.model(
   "story",
@@ -28,6 +28,6 @@ const Story = mongoose.model(
       default: 0
     }
   })
-);
+)
 
-module.exports = Story;
+module.exports = Story

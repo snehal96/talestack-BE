@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserFollower = mongoose.model(
   "userFollower",
@@ -8,6 +8,6 @@ const UserFollower = mongoose.model(
     userId: String,
     followingId: String,
   })
-);
+)
 
-module.exports = UserFollower;
+module.exports = UserFollower

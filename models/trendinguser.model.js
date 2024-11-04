@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const TrendingUser = mongoose.model(
   "trendingUser",
@@ -23,6 +23,6 @@ const TrendingUser = mongoose.model(
       default: 0,
     },
   })
-);
+)
 
-module.exports = TrendingUser;
+module.exports = TrendingUser

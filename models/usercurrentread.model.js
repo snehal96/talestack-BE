@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserCurrentRead = mongoose.model(
   "userCurrentRead",
@@ -9,6 +9,6 @@ const UserCurrentRead = mongoose.model(
     storyId: String,
     userId: String,
   })
-);
+)
 
-module.exports = UserCurrentRead;
+module.exports = UserCurrentRead

@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserSavedTale = mongoose.model(
   "userSavedTale",
@@ -8,6 +8,6 @@ const UserSavedTale = mongoose.model(
     userId: String,
     taleId: String,
   })
-);
+)
 
-module.exports = UserSavedTale;
+module.exports = UserSavedTale

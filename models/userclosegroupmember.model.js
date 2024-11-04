@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserCloseGroupMember = mongoose.model(
     "userclosegroupmember",
@@ -8,6 +8,6 @@ const UserCloseGroupMember = mongoose.model(
       closeGroupId: String,
       memberId: String
     })
-  );
+  )
   
-  module.exports = UserCloseGroupMember;
+  module.exports = UserCloseGroupMember

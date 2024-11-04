@@ -1,6 +1,6 @@
 exports.baseInteraction = {
   createdDate: Date,
-};
+}
 
 exports.base = {
   entityId: String,
@@ -14,4 +14,4 @@ exports.base = {
     default: false,
     required: true,
   },
-};
+}

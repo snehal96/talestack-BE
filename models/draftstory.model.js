@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const DraftStory = mongoose.model(
   "draftStory",
@@ -11,6 +11,6 @@ const DraftStory = mongoose.model(
     title: String,
     content: String,
   })
-);
+)
 
-module.exports = DraftStory;
+module.exports = DraftStory

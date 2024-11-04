@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const Category = mongoose.model(
   "category",
@@ -9,6 +9,6 @@ const Category = mongoose.model(
     thumbnailUrl: String,
     parentId: String,
   })
-);
+)
 
-module.exports = Category;
+module.exports = Category

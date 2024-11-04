@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserFollowingCategory = mongoose.model(
   "userFollowingCategory",
@@ -8,6 +8,6 @@ const UserFollowingCategory = mongoose.model(
     userId: String,
     categoryId: String,
   })
-);
+)
 
-module.exports = UserFollowingCategory;
+module.exports = UserFollowingCategory

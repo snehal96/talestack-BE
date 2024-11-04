@@ -1,6 +1,6 @@
-const controller = require("../controller/user.controller");
-const { fileUploadMiddleware } = require("../middleware/fileupload.middleware");
-const { firebaseAuthMiddleware } = require("../middleware/firebaseauth.middleware");
+const controller = require("../controller/user.controller")
+const { fileUploadMiddleware } = require("../middleware/fileupload.middleware")
+const { firebaseAuthMiddleware } = require("../middleware/firebaseauth.middleware")
 const multerMiddleware = require('../middleware/multer.middleware')
 
 module.exports = (app) => {
@@ -8,52 +8,52 @@ module.exports = (app) => {
     res.header(
       "Access-Control-Allow-Headers",
       "x-access-token, Origin, Content-Type, Accept"
-    );
-    res.header("Access-Control-Allow-Origin", "*");
+    )
+    res.header("Access-Control-Allow-Origin", "*")
 
-    next();
-  });
+    next()
+  })
 
-  app.get("/api/v1/user", firebaseAuthMiddleware, controller.getAllUsers);
-  app.get("/api/v1/user/:id", firebaseAuthMiddleware, controller.getUserById);
+  app.get("/api/v1/user", firebaseAuthMiddleware, controller.getAllUsers)
+  app.get("/api/v1/user/:id", firebaseAuthMiddleware, controller.getUserById)
   app.post(
     "/api/v1/user",
     [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.addUser
-  );
+  )
   app.put(
     "/api/v1/user/:id",
     [firebaseAuthMiddleware, multerMiddleware.single('thumbnail')],
     controller.updateUser
-  );
+  )
   app.put(
     "/api/v1/user/trending/tale",
     firebaseAuthMiddleware,
     controller.updateTrendingTale
-  );
+  )
   app.get(
     "/api/v1/user/trending/user",
     firebaseAuthMiddleware,
     controller.getTrendingUser
-  );
+  )
   app.put(
     "/api/v1/user/trending/user",
     firebaseAuthMiddleware,
     controller.updateTrendingUser
-  );
+  )
   app.get(
     "/api/v1/user/current/read",
     firebaseAuthMiddleware,
     controller.getUserAllCurrentRead
-  );
+  )
   app.post(
     "/api/v1/user/current/read",
     firebaseAuthMiddleware,
     controller.addUserCurrentRead
-  );
+  )
   app.delete(
     "/api/v1/user/current/read",
     firebaseAuthMiddleware,
     controller.removeUserCurrentRead
-  );
-};
+  )
+}

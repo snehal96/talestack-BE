@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserInteraction = mongoose.model(
   "userinteraction",
@@ -10,6 +10,6 @@ const UserInteraction = mongoose.model(
     entityType: String,
     interactionType: String
   })
-);
+)
 
-module.exports = UserInteraction;
+module.exports = UserInteraction

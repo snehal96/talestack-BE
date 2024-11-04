@@ -1,5 +1,5 @@
-const mongoose = require("mongoose");
-const base = require("./base.model");
+const mongoose = require("mongoose")
+const base = require("./base.model")
 
 const UserLikedStory = mongoose.model(
   "userLikedStory",
@@ -8,6 +8,6 @@ const UserLikedStory = mongoose.model(
     userId: String,
     storyId: String,
   })
-);
+)
 
-module.exports = UserLikedStory;
+module.exports = UserLikedStory
